@@ -7,9 +7,11 @@ c:\users\radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Deb
 c:\users\radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.pdb
 C:\Users\Radek\Documents\Visual Studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.PingPoint_main.resources
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.csprojResolveAssemblyReference.cache
-C:\Users\Radek\Documents\Visual Studio 2015\Projects\PingPoint\PingPoint\bin\Debug\MySql.Data.dll
 C:\Users\Radek\Documents\Visual Studio 2015\Projects\PingPoint\PingPoint\bin\Debug\MySql.Data.xml
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\bin\Debug\PingPoint.exe.manifest
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\bin\Debug\PingPoint.application
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.exe.manifest
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.application
+C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.Login.resources
+C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.FriendlyMatchSettings.resources
+C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.Endgame.resources

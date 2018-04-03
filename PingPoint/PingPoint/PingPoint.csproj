@@ -75,16 +75,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Endgame.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Endgame.Designer.cs">
+      <DependentUpon>Endgame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PingPoint_main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PingPoint_main.Designer.cs">
+      <DependentUpon>PingPoint_main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FriendlyMatchSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FriendlyMatchSettings.Designer.cs">
+      <DependentUpon>FriendlyMatchSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Endgame.resx">
+      <DependentUpon>Endgame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PingPoint_main.resx">
+      <DependentUpon>PingPoint_main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FriendlyMatchSettings.resx">
+      <DependentUpon>FriendlyMatchSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -110,9 +137,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
@@ -124,6 +149,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\point.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

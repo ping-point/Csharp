@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PingPoint.exe" size="18400">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PingPoint.exe" size="31200">
       <assemblyIdentity name="PingPoint" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>kSflOBLKQg/oSIb43v0kkbwYMl1Ri4TSy8oJF+mZH6Q=</dsig:DigestValue>
+        <dsig:DigestValue>CagC805obRexr2dboXkRBQyhh67xoCj5aUTfcs6yUpU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -72,6 +72,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>6N7MliNbVJSIAIPrecIshMbZ7zEoKLr5SQvud4LDUOw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Resources\point.png" size="53206">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>DIgEPnjYcxbZKXzi9huwWE7QtlL2eb7QT3H9vEJehGs=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>
