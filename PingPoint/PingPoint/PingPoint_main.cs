@@ -46,6 +46,7 @@ namespace PingPoint
         int sets_player1 = 0; //number of player1 won sets 
         int sets_player2 = 0; //number of player2 won sets
         public static bool rematch = false;
+        public static bool change_set = false;
         public static string my_login;
         public static string my_password;
 
@@ -225,11 +226,11 @@ namespace PingPoint
                         break;
                 }
             }
-            if(sets_player1 == set_max)
+            if(sets_player1 == set_max)//set - w przypadku ukośnego zaznaczania punktów (nie blokowego)
             {
                 endgame(point1);
             }
-            else if(sets_player2 == set_max)
+            else if(sets_player2 == set_max)//set - w przypadku ukośnego zaznaczania punktów (nie blokowego)
             {
                 endgame(point2);
             }
@@ -241,11 +242,60 @@ namespace PingPoint
             }
             
         }
+        private void cleanup(bool all)
+        {
+            //cleanup sets value
+            pictureBox_point1_1.Visible = false;
+            pictureBox_point1_2.Visible = false;
+            pictureBox_point1_3.Visible = false;
+            pictureBox_point1_4.Visible = false;
+            pictureBox_point1_5.Visible = false;
+            pictureBox_point1_6.Visible = false;
+            pictureBox_point1_7.Visible = false;
+            pictureBox_point2_1.Visible = false;
+            pictureBox_point2_2.Visible = false;
+            pictureBox_point2_3.Visible = false;
+            pictureBox_point2_4.Visible = false;
+            pictureBox_point2_5.Visible = false;
+            pictureBox_point2_6.Visible = false;
+            pictureBox_point2_7.Visible = false;
+            sets_player1 = 0;
+            sets_player2 = 0;
+            label_set.Text = "1";
+            //cleanup visible elements
+            panel_sets1.Visible = false;
+            panel_sets2.Visible = false;
+            label_static_set.Visible = false;
+            label_set.Visible = false;
+            label_colon.Visible = false;
+            label_points1.Visible = false;
+            label_points2.Visible = false;
+            label_points_up1.Visible = false;
+            label_points_up2.Visible = false;
+            label_player1.Visible = false;
+            label_player2.Visible = false;
+            //cleanup enabled elements
+            button_login1.Enabled = true;
+            button_login2.Enabled = true;
+            listBox_rodzaj.Enabled = true;
+            button_start.Enabled = true;
+            if(all == true)
+            {
+                //cleanup variables
+                logged1 = false;
+                logged2 = false;
+                listBox_rodzaj.ClearSelected();
+                label_player1.Text = "Zawodnik1";
+                label_player2.Text = "Zawodnik2";
+                choosed = false;
+            }
+        }
 
         private void button_start_Click(object sender, EventArgs e)
         {
             if(logged1 && logged2 && choosed)
             {
+                cleanup(false);
                 //initialize visible
                 panel_sets1.Visible = true;
                 panel_sets2.Visible = true;
@@ -267,24 +317,6 @@ namespace PingPoint
                 button_login2.Enabled = false;
                 listBox_rodzaj.Enabled = false;
                 button_start.Enabled = false;
-                //initialize sets value
-                pictureBox_point1_1.Visible = false;
-                pictureBox_point1_2.Visible = false;
-                pictureBox_point1_3.Visible = false;
-                pictureBox_point1_4.Visible = false;
-                pictureBox_point1_5.Visible = false;
-                pictureBox_point1_6.Visible = false;
-                pictureBox_point1_7.Visible = false;
-                pictureBox_point2_1.Visible = false;
-                pictureBox_point2_2.Visible = false;
-                pictureBox_point2_3.Visible = false;
-                pictureBox_point2_4.Visible = false;
-                pictureBox_point2_5.Visible = false;
-                pictureBox_point2_6.Visible = false;
-                pictureBox_point2_7.Visible = false;
-                sets_player1 = 0;
-                sets_player2 = 0;
-                label_set.Text = "1";
                 button_start.Text = "Start";
             }
             else if(logged1 && choosed) MessageBox.Show("Player 2 is not logged in!");
@@ -355,16 +387,19 @@ namespace PingPoint
         }
         private void listBox_rodzaj_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.listBox_rodzaj.SelectedItem.ToString() == "Turniej")
+            if(this.listBox_rodzaj.SelectedItem != null)
             {
-
+                if (this.listBox_rodzaj.SelectedItem.ToString() == "Turniej")
+                {
+                    //tutaj to samo co do meczu towarzyskiego
+                }
+                if (this.listBox_rodzaj.SelectedItem.ToString() == "Mecz towarzyski")
+                {
+                    FriendlyMatchSettings settings = new FriendlyMatchSettings();
+                    settings.ShowDialog();
+                }
+                choosed = true;
             }
-            if (this.listBox_rodzaj.SelectedItem.ToString() == "Mecz towarzyski")
-            {
-                FriendlyMatchSettings settings = new FriendlyMatchSettings();
-                settings.ShowDialog();
-            }
-            choosed = true;
         }
         private void label_points_up1_Click(object sender, EventArgs e)
         {
@@ -373,8 +408,18 @@ namespace PingPoint
             points_update();
             if (point1 == point_max)
             {
-                sets_player1++;
-                sets_update(point1);
+                Wait change = new Wait(label_player1.Text, this);
+                change.ShowDialog();
+                if (change_set == false)
+                {
+                    sets_player1++;
+                    sets_update(point1);
+                }
+                else
+                {
+                    points.Remove(k);
+                    points_update();
+                }
             }
         }
 
@@ -392,8 +437,19 @@ namespace PingPoint
             points_update();
             if (point2 == point_max)
             {
-                sets_player2++;
-                sets_update(point2);
+                //funkcja czekająca na zmiany 5 sekund np
+                Wait change = new Wait(label_player2.Text, this);
+                change.ShowDialog();
+                if (change_set == false)
+                {
+                    sets_player2++;
+                    sets_update(point2);
+                }
+                else
+                {
+                    points.Remove(k);
+                    points_update();
+                }
             }
         }
 
@@ -406,6 +462,7 @@ namespace PingPoint
         public void endgame(int win)
         {
             string winner;
+            bool turniej = false;
             if (win == point1)
             {
                 winner = label_player1.Text;
@@ -414,13 +471,26 @@ namespace PingPoint
             {
                 winner = label_player2.Text;
             }
-            Endgame end = new Endgame(winner);
+            if (listBox_rodzaj.SelectedItem.ToString() == "Turniej")
+            {
+                turniej = true;
+            }
+            else
+            {
+                turniej = false;
+            }
+            Endgame end = new Endgame(winner, turniej);
             label_points_down1.Visible = false;
             label_points_down2.Visible = false;
             label_points_up1.Visible = false;
             label_points_up2.Visible = false;
             end.ShowDialog();
             if (rematch == false)
+            {
+                //funkcja czyszcząca
+                cleanup(true);
+            }
+            else
             {
                 button_start.Enabled = true;
                 button_start.Text = "Rewanż";

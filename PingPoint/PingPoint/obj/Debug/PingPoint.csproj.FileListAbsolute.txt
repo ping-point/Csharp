@@ -15,3 +15,4 @@ C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Deb
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.Login.resources
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.FriendlyMatchSettings.resources
 C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.Endgame.resources
+C:\Users\Radek\documents\visual studio 2015\Projects\PingPoint\PingPoint\obj\Debug\PingPoint.Wait.resources

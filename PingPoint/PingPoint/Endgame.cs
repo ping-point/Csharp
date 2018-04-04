@@ -13,15 +13,22 @@ namespace PingPoint
     public partial class Endgame : Form
     {
         string winner;
-        public Endgame(string win)
+        public Endgame(string win, bool turniej)
         {
             InitializeComponent();
             winner = win;
             label_winner.Text = winner;
-
+            if(turniej == true)
+            {
+                button_rematch.Enabled = false;
+            }
+            else
+            {
+                button_rematch.Enabled = true;
+            }
         }
 
-        private void button_show_score_Click(object sender, EventArgs e)
+        private void button_rematch_Click(object sender, EventArgs e)
         {
             PingPoint_main.rematch = true;
             this.Close();
@@ -29,6 +36,7 @@ namespace PingPoint
 
         private void button_endgame_Click(object sender, EventArgs e)
         {
+            PingPoint_main.rematch = false;
             this.Close();
         }
     }
