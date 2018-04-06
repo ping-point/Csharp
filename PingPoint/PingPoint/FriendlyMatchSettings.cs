@@ -19,19 +19,19 @@ namespace PingPoint
 
         private void button_var1_Click(object sender, EventArgs e)
         {
-            numericUpDown_set.Value = 3;
-            numericUpDown_point.Value = 7;
+            numericUpDown_set.Value = 1;
+            numericUpDown_point.Value = 6;
         }
 
         private void button_var2_Click(object sender, EventArgs e)
         {
-            numericUpDown_set.Value = 5;
+            numericUpDown_set.Value = 3;
             numericUpDown_point.Value = 11;
         }
 
         private void button_var3_Click(object sender, EventArgs e)
         {
-            numericUpDown_set.Value = 7;
+            numericUpDown_set.Value = 5;
             numericUpDown_point.Value = 21;
         }
 

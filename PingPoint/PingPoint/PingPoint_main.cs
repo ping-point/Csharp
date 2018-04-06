@@ -83,6 +83,7 @@ namespace PingPoint
                 return false;
             }
         }
+
         private bool CloseConnection()
         {
             try
@@ -96,6 +97,7 @@ namespace PingPoint
                 return false;
             }
         }
+
         private void PingPoint_main_Load(object sender, EventArgs e)
         {
             OpenConnection();
@@ -242,6 +244,7 @@ namespace PingPoint
             }
             
         }
+
         private void cleanup(bool all)
         {
             //cleanup sets value
@@ -291,174 +294,6 @@ namespace PingPoint
             }
         }
 
-        private void button_start_Click(object sender, EventArgs e)
-        {
-            if(logged1 && logged2 && choosed)
-            {
-                cleanup(false);
-                //initialize visible
-                panel_sets1.Visible = true;
-                panel_sets2.Visible = true;
-                label_static_set.Visible = true;
-                label_set.Visible = true;
-                label_colon.Visible = true;
-                label_points1.Visible = true;
-                label_points2.Visible = true;
-                label_points_up1.Visible = true;
-                label_points_up2.Visible = true;
-                //initialize list of players points, begin with 0
-                points.Clear();
-                p = new point(1, 0);
-                points.Add(p);
-                p = new point(2, 0);
-                points.Add(p);
-                points_update();
-                button_login1.Enabled = false;
-                button_login2.Enabled = false;
-                listBox_rodzaj.Enabled = false;
-                button_start.Enabled = false;
-                button_start.Text = "Start";
-            }
-            else if(logged1 && choosed) MessageBox.Show("Player 2 is not logged in!");
-            else if(logged2 && choosed) MessageBox.Show("Player 1 is not logged in!");
-            else MessageBox.Show("Set all match settings and log in!");
-        }
-        private void button_login1_Click(object sender, EventArgs e)
-        {
-            Login log = new Login();
-            log.ShowDialog();
-
-            string sql = "SELECT haslo FROM gracze WHERE login='" + my_login + "'";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            rdr.Read();
-            if (rdr.HasRows == true)
-            {
-                if (label_player2.Text != my_login)
-                {
-                    if (rdr[0].ToString() == my_password)
-                    {
-                        label_player1.Text = my_login;
-                        label_player1.Visible = true;
-                        logged1 = true;
-                    }
-                    else MessageBox.Show("Bledne haslo!");
-                }
-                else MessageBox.Show("Osoba juz zalogowana!");
-            }
-            else MessageBox.Show("Bledny login!");
-            rdr.Close();
-        }
-        private void button_login2_Click(object sender, EventArgs e)
-        {
-            Login log = new Login();
-            log.ShowDialog();
-
-            string sql = "SELECT haslo FROM gracze WHERE login='" + my_login + "'";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            MySqlDataReader rdr = cmd.ExecuteReader();
-            rdr.Read();
-            if (rdr.HasRows == true)
-            {
-                if(label_player1.Text != my_login)
-                {
-                    if (rdr[0].ToString() == my_password)
-                    {
-                        label_player2.Text = my_login;
-                        label_player2.Visible = true;
-                        logged2 = true;
-                    }
-                    else MessageBox.Show("Bledne haslo!");
-                }
-                else MessageBox.Show("Osoba juz zalogowana!");
-            }
-            else MessageBox.Show("Bledny login!");
-            rdr.Close();
-        }
-        private void checkBox_auto_CheckedChanged(object sender, EventArgs e)
-        {
-            if(checkBox_auto.Checked == true)
-            {
-                //otrzymuj sygnały z programu Michała i dodawaj pkt
-            }
-            else
-            {
-            }
-        }
-        private void listBox_rodzaj_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(this.listBox_rodzaj.SelectedItem != null)
-            {
-                if (this.listBox_rodzaj.SelectedItem.ToString() == "Turniej")
-                {
-                    //tutaj to samo co do meczu towarzyskiego
-                }
-                if (this.listBox_rodzaj.SelectedItem.ToString() == "Mecz towarzyski")
-                {
-                    FriendlyMatchSettings settings = new FriendlyMatchSettings();
-                    settings.ShowDialog();
-                }
-                choosed = true;
-            }
-        }
-        private void label_points_up1_Click(object sender, EventArgs e)
-        {
-            point k = new point(1, point1 + 1);
-            points.Add(k);
-            points_update();
-            if (point1 == point_max)
-            {
-                Wait change = new Wait(label_player1.Text, this);
-                change.ShowDialog();
-                if (change_set == false)
-                {
-                    sets_player1++;
-                    sets_update(point1);
-                }
-                else
-                {
-                    points.Remove(k);
-                    points_update();
-                }
-            }
-        }
-
-        private void label_points_down1_Click(object sender, EventArgs e)
-        {
-            point k = new point(1, point1);
-            points.Remove(k);
-            points_update();
-        }
-
-        private void label_points_up2_Click(object sender, EventArgs e)
-        {
-            point k = new point(2, point2 + 1);
-            points.Add(k);
-            points_update();
-            if (point2 == point_max)
-            {
-                //funkcja czekająca na zmiany 5 sekund np
-                Wait change = new Wait(label_player2.Text, this);
-                change.ShowDialog();
-                if (change_set == false)
-                {
-                    sets_player2++;
-                    sets_update(point2);
-                }
-                else
-                {
-                    points.Remove(k);
-                    points_update();
-                }
-            }
-        }
-
-        private void label_points_down2_Click(object sender, EventArgs e)
-        {
-            point k = new point(2, point2);
-            points.Remove(k);
-            points_update();
-        }
         public void endgame(int win)
         {
             string winner;
@@ -495,6 +330,211 @@ namespace PingPoint
                 button_start.Enabled = true;
                 button_start.Text = "Rewanż";
             }
+        }
+
+        private void button_start_Click(object sender, EventArgs e)
+        {
+            if(logged1 && logged2 && choosed)
+            {
+                cleanup(false);
+                //initialize visible
+                panel_sets1.Visible = true;
+                panel_sets2.Visible = true;
+                label_static_set.Visible = true;
+                label_set.Visible = true;
+                label_colon.Visible = true;
+                label_points1.Visible = true;
+                label_points2.Visible = true;
+                label_points_up1.Visible = true;
+                label_points_up2.Visible = true;
+                //initialize list of players points, begin with 0
+                points.Clear();
+                p = new point(1, 0);
+                points.Add(p);
+                p = new point(2, 0);
+                points.Add(p);
+                points_update();
+                button_login1.Enabled = false;
+                button_login2.Enabled = false;
+                listBox_rodzaj.Enabled = false;
+                button_start.Enabled = false;
+                button_start.Text = "Start";
+            }
+            else if(logged1 && choosed) MessageBox.Show("Player 2 is not logged in!");
+            else if(logged2 && choosed) MessageBox.Show("Player 1 is not logged in!");
+            else MessageBox.Show("Set all match settings and log in!");
+        }
+
+        private void button_login1_Click(object sender, EventArgs e)
+        {
+            Login log = new Login();
+            log.ShowDialog();
+
+            string sql = "SELECT haslo FROM gracze WHERE login='" + my_login + "'";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            rdr.Read();
+            if (rdr.HasRows == true)
+            {
+                if (label_player2.Text != my_login)
+                {
+                    if (rdr[0].ToString() == my_password)
+                    {
+                        label_player1.Text = my_login;
+                        label_player1.Visible = true;
+                        logged1 = true;
+                    }
+                    else MessageBox.Show("Bledne haslo!");
+                }
+                else MessageBox.Show("Osoba juz zalogowana!");
+            }
+            else MessageBox.Show("Bledny login!");
+            rdr.Close();
+        }
+
+        private void button_login2_Click(object sender, EventArgs e)
+        {
+            Login log = new Login();
+            log.ShowDialog();
+
+            string sql = "SELECT haslo FROM gracze WHERE login='" + my_login + "'";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            rdr.Read();
+            if (rdr.HasRows == true)
+            {
+                if(label_player1.Text != my_login)
+                {
+                    if (rdr[0].ToString() == my_password)
+                    {
+                        label_player2.Text = my_login;
+                        label_player2.Visible = true;
+                        logged2 = true;
+                    }
+                    else MessageBox.Show("Bledne haslo!");
+                }
+                else MessageBox.Show("Osoba juz zalogowana!");
+            }
+            else MessageBox.Show("Bledny login!");
+            rdr.Close();
+        }
+
+        private void checkBox_auto_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox_auto.Checked == true)
+            {
+                //otrzymuj sygnały z programu Michała i dodawaj pkt
+            }
+            else
+            {
+            }
+        }
+
+        private void listBox_rodzaj_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(this.listBox_rodzaj.SelectedItem != null)
+            {
+                if (this.listBox_rodzaj.SelectedItem.ToString() == "Turniej")
+                {
+                    if(logged1 == true && logged2 == true)
+                    {
+                        List<string> tablica = new List<string>();
+                        string tournament_id = "SELECT turnieje_id FROM mecze WHERE gracz1_id = '" + label_player1.Text + "' ";
+                        tournament_id += "AND gracz2_id = '" + label_player2.Text + "' AND data IS NULL AND turnieje_id IS NOT NULL";
+                        MySqlCommand cmd_id = new MySqlCommand(tournament_id, conn);
+                        MySqlDataReader rdr = cmd_id.ExecuteReader();
+                        DataTable data_tournament_id = new DataTable();
+                        data_tournament_id.Load(rdr);
+                        if (data_tournament_id.Rows.Count > 0)
+                        {
+                            foreach(DataRow row in data_tournament_id.Rows)
+                            {
+                                tablica.Add(row["turnieje_id"].ToString());
+                            }
+                            TournamentMatchSettings settings = new TournamentMatchSettings(tablica, conn);
+                            settings.ShowDialog();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Brak dostępnych meczy turniejowych dla zalogowanych graczy!");
+                            listBox_rodzaj.ClearSelected();
+                        }
+                        rdr.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Musisz najpierw się zalogować!");
+                        listBox_rodzaj.ClearSelected();
+                    }
+                    choosed = true;
+                }
+                else if (this.listBox_rodzaj.SelectedItem.ToString() == "Mecz towarzyski")
+                {
+                    FriendlyMatchSettings settings = new FriendlyMatchSettings();
+                    settings.ShowDialog();
+                    choosed = true;
+                }
+                
+            }
+        }
+
+        private void label_points_up1_Click(object sender, EventArgs e)
+        {
+            point k = new point(1, point1 + 1);
+            points.Add(k);
+            points_update();
+            if (point1 == point_max)
+            {
+                Wait agree = new Wait(label_player1.Text);
+                agree.ShowDialog();
+                if (change_set == false)
+                {
+                    sets_player1++;
+                    sets_update(point1);
+                }
+                else
+                {
+                    points.Remove(k);
+                    points_update();
+                }
+            }
+        }
+
+        private void label_points_down1_Click(object sender, EventArgs e)
+        {
+            point k = new point(1, point1);
+            points.Remove(k);
+            points_update();
+        }
+
+        private void label_points_up2_Click(object sender, EventArgs e)
+        {
+            point k = new point(2, point2 + 1);
+            points.Add(k);
+            points_update();
+            if (point2 == point_max)
+            {
+                //przycisk potwierdzający set
+                Wait agree = new Wait(label_player2.Text);
+                agree.ShowDialog();
+                if (change_set == false)
+                {
+                    sets_player2++;
+                    sets_update(point2);
+                }
+                else
+                {
+                    points.Remove(k);
+                    points_update();
+                }
+            }
+        }
+
+        private void label_points_down2_Click(object sender, EventArgs e)
+        {
+            point k = new point(2, point2);
+            points.Remove(k);
+            points_update();
         }
     }
 }

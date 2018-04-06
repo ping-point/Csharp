@@ -62,11 +62,6 @@
             // 
             // numericUpDown_set
             // 
-            this.numericUpDown_set.Increment = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
             this.numericUpDown_set.Location = new System.Drawing.Point(162, 114);
             this.numericUpDown_set.Maximum = new decimal(new int[] {
             7,
@@ -83,7 +78,7 @@
             this.numericUpDown_set.Size = new System.Drawing.Size(102, 20);
             this.numericUpDown_set.TabIndex = 2;
             this.numericUpDown_set.Value = new decimal(new int[] {
-            5,
+            3,
             0,
             0,
             0});
@@ -106,7 +101,7 @@
             this.numericUpDown_point.Size = new System.Drawing.Size(102, 20);
             this.numericUpDown_point.TabIndex = 3;
             this.numericUpDown_point.Value = new decimal(new int[] {
-            10,
+            11,
             0,
             0,
             0});
