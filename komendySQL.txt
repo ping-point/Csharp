@@ -1,0 +1,27 @@
+﻿Gdy mecz to mecz pucharowy:
+Sprawdzamy czy wszystkie mecze w turnieju się już odbyły:
+SELECT COUNT(mecze_ID) from mecze where turnieje_ID = id_turnieju AND data is null; -> to powinno zwrócić zero, jesli wszystkie się już odbyły
+Jeśli sie odbyły:
+Liczymy ilość graczy:
+SELECT COUNT(login) from gracze where login in (select gracz1_ID from mecze where turnieje_ID = id_turnieju UNION SELECT gracz2_ID from mecze where turnieje_ID = id_turnieju);
+Liczymy ilość meczy
+SELECT COUNT(mecze_ID) from mecze where turnieje_ID = id_turnieju;
+teraz chcemy "najświeższe" mecze
+N = ilość graczy
+M - ilość meczy
+while(M > N/2)
+{
+  M -= N/2;
+  N = N/2;
+}
+teraz M to te ostatnie mecze
+jesli M > 1,] to teraz trzeba wyciągnąć wygranych z tych meczy:
+SELECT punkt FROM punkty p INNER JOIN (SELECT mecze_id FROM mecze where turnieje_ID = id_turnieju order by mecze_id DESC LIMIT M) as m USING(mecze_ID) where p.punkty_ID = (SELECT max(punkty_ID) from punkty WHERE mecze_ID = p.mecze_ID);
+zapiszmy je w wektorze/liście nowi
+teraz zapiszmy to bazy nowe mecze - pary z nowi
+for(int i = 0; i < nowi.size()/2; i++)
+INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES (id_turnieju, nowi[2*i], nowi[2*i+1], null);
+i powinnismy mieć wpisane nowe mecze i gites majonez
+
+uwaga: czy w meczu pucharowym nie powinno byc dogrywki o 3 miejsce?
+wtedy, gdy M = 2, to z tego przegrani ludkowie grali by sobą
