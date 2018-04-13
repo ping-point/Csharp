@@ -15,6 +15,7 @@ namespace PingPoint
     {
         int points = 0;
         int sets = 0;
+        int t_id;
 
         public TournamentMatchSettings(List<string> tablica, MySqlConnection conn)
         {
@@ -33,22 +34,28 @@ namespace PingPoint
                 string pkt = row["do_ilu_punkty"].ToString();
                 string set = row["do_ilu_sety"].ToString();
                 string overview = row["opis"].ToString();
-                if(id != prev_id)
+                if (id != prev_id)
                 {
-                    dataGridView_tournament.Rows.Add(type, pkt, set, overview);
+                    dataGridView_tournament.Rows.Add(type, pkt, set, overview, id);
                     prev_id = id;
                 }
-
-                Int32.TryParse(pkt, out points);
-                Int32.TryParse(set, out sets);
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            PingPoint_main.tournament_id = t_id;
             PingPoint_main.point_max = points;
             PingPoint_main.set_max = sets;
+            PingPoint_main.choosed = true;
             this.Close();
+        }
+
+        private void dataGridView_tournament_SelectionChanged(object sender, EventArgs e)
+        {
+            Int32.TryParse(dataGridView_tournament.SelectedCells[4].Value.ToString(), out t_id);
+            Int32.TryParse(dataGridView_tournament.SelectedCells[2].Value.ToString(), out sets);
+            Int32.TryParse(dataGridView_tournament.SelectedCells[1].Value.ToString(), out points);
         }
     }
 }

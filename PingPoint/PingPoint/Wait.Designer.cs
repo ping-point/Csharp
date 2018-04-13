@@ -53,7 +53,7 @@
             this.label_next_set.Name = "label_next_set";
             this.label_next_set.Size = new System.Drawing.Size(290, 80);
             this.label_next_set.TabIndex = 1;
-            this.label_next_set.Text = "Przejdź do następnego setu";
+            this.label_next_set.Text = "Zamknij i przejdź dalej";
             this.label_next_set.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_next_set.Click += new System.EventHandler(this.label_next_set_Click);
             // 

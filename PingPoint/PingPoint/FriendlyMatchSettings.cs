@@ -39,6 +39,7 @@ namespace PingPoint
         {
             PingPoint_main.point_max = numericUpDown_point.Value;
             PingPoint_main.set_max = numericUpDown_set.Value;
+            PingPoint_main.choosed = true;
             this.Close();
         }
     }

@@ -29,11 +29,13 @@
         private void InitializeComponent()
         {
             this.button_choose = new System.Windows.Forms.Button();
-            this.dataGridView_tournament = new System.Windows.Forms.DataGridView();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Points = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Sets = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Overview = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridView_tournament = new System.Windows.Forms.DataGridView();
+            this.Typ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ile_punktow = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ile_setow = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Opis = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_tournament)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,26 +49,6 @@
             this.button_choose.UseVisualStyleBackColor = true;
             this.button_choose.Click += new System.EventHandler(this.button1_Click);
             // 
-            // dataGridView_tournament
-            // 
-            this.dataGridView_tournament.AllowUserToAddRows = false;
-            this.dataGridView_tournament.AllowUserToDeleteRows = false;
-            this.dataGridView_tournament.AllowUserToResizeColumns = false;
-            this.dataGridView_tournament.AllowUserToResizeRows = false;
-            this.dataGridView_tournament.BackgroundColor = System.Drawing.SystemColors.Menu;
-            this.dataGridView_tournament.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_tournament.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Type,
-            this.Points,
-            this.Sets,
-            this.Overview});
-            this.dataGridView_tournament.Location = new System.Drawing.Point(12, 12);
-            this.dataGridView_tournament.MultiSelect = false;
-            this.dataGridView_tournament.Name = "dataGridView_tournament";
-            this.dataGridView_tournament.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView_tournament.Size = new System.Drawing.Size(442, 167);
-            this.dataGridView_tournament.TabIndex = 2;
-            // 
             // Type
             // 
             this.Type.FillWeight = 50F;
@@ -75,26 +57,56 @@
             this.Type.Name = "Type";
             this.Type.ReadOnly = true;
             // 
-            // Points
+            // dataGridView_tournament
             // 
-            this.Points.Frozen = true;
-            this.Points.HeaderText = "Punkty";
-            this.Points.Name = "Points";
-            this.Points.ReadOnly = true;
+            this.dataGridView_tournament.AllowUserToAddRows = false;
+            this.dataGridView_tournament.AllowUserToDeleteRows = false;
+            this.dataGridView_tournament.AllowUserToResizeColumns = false;
+            this.dataGridView_tournament.AllowUserToResizeRows = false;
+            this.dataGridView_tournament.BackgroundColor = System.Drawing.SystemColors.Menu;
+            this.dataGridView_tournament.ColumnHeadersHeight = 20;
+            this.dataGridView_tournament.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView_tournament.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Typ,
+            this.Ile_punktow,
+            this.Ile_setow,
+            this.Opis,
+            this.Id});
+            this.dataGridView_tournament.Location = new System.Drawing.Point(13, 12);
+            this.dataGridView_tournament.MultiSelect = false;
+            this.dataGridView_tournament.Name = "dataGridView_tournament";
+            this.dataGridView_tournament.RowHeadersWidth = 38;
+            this.dataGridView_tournament.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView_tournament.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView_tournament.Size = new System.Drawing.Size(441, 150);
+            this.dataGridView_tournament.TabIndex = 3;
+            this.dataGridView_tournament.SelectionChanged += new System.EventHandler(this.dataGridView_tournament_SelectionChanged);
             // 
-            // Sets
+            // Typ
             // 
-            this.Sets.Frozen = true;
-            this.Sets.HeaderText = "Sety";
-            this.Sets.Name = "Sets";
-            this.Sets.ReadOnly = true;
+            this.Typ.HeaderText = "Typ";
+            this.Typ.Name = "Typ";
             // 
-            // Overview
+            // Ile_punktow
             // 
-            this.Overview.Frozen = true;
-            this.Overview.HeaderText = "Opis";
-            this.Overview.Name = "Overview";
-            this.Overview.ReadOnly = true;
+            this.Ile_punktow.HeaderText = "Ile punktów";
+            this.Ile_punktow.Name = "Ile_punktow";
+            // 
+            // Ile_setow
+            // 
+            this.Ile_setow.HeaderText = "Ile setów";
+            this.Ile_setow.Name = "Ile_setow";
+            // 
+            // Opis
+            // 
+            this.Opis.HeaderText = "Opis";
+            this.Opis.Name = "Opis";
+            // 
+            // Id
+            // 
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            this.Id.Visible = false;
             // 
             // TournamentMatchSettings
             // 
@@ -117,10 +129,12 @@
 
         #endregion
         private System.Windows.Forms.Button button_choose;
-        private System.Windows.Forms.DataGridView dataGridView_tournament;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Points;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Sets;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Overview;
+        private System.Windows.Forms.DataGridView dataGridView_tournament;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Typ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ile_punktow;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ile_setow;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Opis;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
     }
 }

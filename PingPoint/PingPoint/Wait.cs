@@ -22,13 +22,13 @@ namespace PingPoint
 
         private void label_change_Click(object sender, EventArgs e)
         {
-            PingPoint_main.change_set = true;
+            PingPoint_main.accept_set = true;
             this.Close();
         }
 
         private void label_next_set_Click(object sender, EventArgs e)
         {
-            PingPoint_main.change_set = false;
+            PingPoint_main.accept_set = false;
             this.Close();
         }
     }
