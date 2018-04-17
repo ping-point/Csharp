@@ -1,0 +1,12 @@
+Ten sam problem:
+https://social.msdn.microsoft.com/Forums/vstudio/en-US/110dffff-76ae-428f-bc68-6e543b8115af/c-to-c-interprocess-communucation?forum=csharpgeneral
+
+Proste i dobrze wyjaœnione:
+https://www.codeproject.com/Tips/420582/Inter-Process-Communication-between-Csharp-and-Cpl
+
+https://stackoverflow.com/questions/31307508/fastest-way-to-signal-one-thread-from-another?rq=1
+
+https://stackoverflow.com/questions/2064103/interprocess-communication-between-c-sharp-and-c
+
+S³abo wyjaœnione. Ale jednak:
+https://softwareengineering.stackexchange.com/questions/184739/communication-between-a-c-application-and-c-dll
