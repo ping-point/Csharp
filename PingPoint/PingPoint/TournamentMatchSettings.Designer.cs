@@ -75,6 +75,7 @@
             this.dataGridView_tournament.Location = new System.Drawing.Point(13, 12);
             this.dataGridView_tournament.MultiSelect = false;
             this.dataGridView_tournament.Name = "dataGridView_tournament";
+            this.dataGridView_tournament.ReadOnly = true;
             this.dataGridView_tournament.RowHeadersWidth = 38;
             this.dataGridView_tournament.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView_tournament.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -86,26 +87,31 @@
             // 
             this.Typ.HeaderText = "Typ";
             this.Typ.Name = "Typ";
+            this.Typ.ReadOnly = true;
             // 
             // Ile_punktow
             // 
             this.Ile_punktow.HeaderText = "Ile punktów";
             this.Ile_punktow.Name = "Ile_punktow";
+            this.Ile_punktow.ReadOnly = true;
             // 
             // Ile_setow
             // 
             this.Ile_setow.HeaderText = "Ile setów";
             this.Ile_setow.Name = "Ile_setow";
+            this.Ile_setow.ReadOnly = true;
             // 
             // Opis
             // 
             this.Opis.HeaderText = "Opis";
             this.Opis.Name = "Opis";
+            this.Opis.ReadOnly = true;
             // 
             // Id
             // 
             this.Id.HeaderText = "Id";
             this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
             this.Id.Visible = false;
             // 
             // TournamentMatchSettings

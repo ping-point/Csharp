@@ -36,15 +36,18 @@
             this.button_var1 = new System.Windows.Forms.Button();
             this.button_var3 = new System.Windows.Forms.Button();
             this.button_var2 = new System.Windows.Forms.Button();
+            this.numericUpDown_serve = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_set)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_point)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_serve)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(15, 111);
+            this.label1.Location = new System.Drawing.Point(15, 90);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(113, 22);
             this.label1.TabIndex = 0;
@@ -54,7 +57,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(15, 147);
+            this.label2.Location = new System.Drawing.Point(15, 120);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(133, 22);
             this.label2.TabIndex = 1;
@@ -62,7 +65,7 @@
             // 
             // numericUpDown_set
             // 
-            this.numericUpDown_set.Location = new System.Drawing.Point(162, 114);
+            this.numericUpDown_set.Location = new System.Drawing.Point(162, 90);
             this.numericUpDown_set.Maximum = new decimal(new int[] {
             7,
             0,
@@ -85,7 +88,7 @@
             // 
             // numericUpDown_point
             // 
-            this.numericUpDown_point.Location = new System.Drawing.Point(162, 150);
+            this.numericUpDown_point.Location = new System.Drawing.Point(162, 120);
             this.numericUpDown_point.Maximum = new decimal(new int[] {
             30,
             0,
@@ -118,7 +121,7 @@
             // 
             // button_var1
             // 
-            this.button_var1.Location = new System.Drawing.Point(13, 32);
+            this.button_var1.Location = new System.Drawing.Point(12, 12);
             this.button_var1.Name = "button_var1";
             this.button_var1.Size = new System.Drawing.Size(80, 60);
             this.button_var1.TabIndex = 10;
@@ -128,7 +131,7 @@
             // 
             // button_var3
             // 
-            this.button_var3.Location = new System.Drawing.Point(184, 32);
+            this.button_var3.Location = new System.Drawing.Point(184, 12);
             this.button_var3.Name = "button_var3";
             this.button_var3.Size = new System.Drawing.Size(80, 60);
             this.button_var3.TabIndex = 9;
@@ -138,7 +141,7 @@
             // 
             // button_var2
             // 
-            this.button_var2.Location = new System.Drawing.Point(98, 32);
+            this.button_var2.Location = new System.Drawing.Point(98, 12);
             this.button_var2.Name = "button_var2";
             this.button_var2.Size = new System.Drawing.Size(80, 60);
             this.button_var2.TabIndex = 8;
@@ -146,11 +149,46 @@
             this.button_var2.UseVisualStyleBackColor = true;
             this.button_var2.Click += new System.EventHandler(this.button_var2_Click);
             // 
+            // numericUpDown_serve
+            // 
+            this.numericUpDown_serve.Location = new System.Drawing.Point(162, 150);
+            this.numericUpDown_serve.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDown_serve.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_serve.Name = "numericUpDown_serve";
+            this.numericUpDown_serve.ReadOnly = true;
+            this.numericUpDown_serve.Size = new System.Drawing.Size(102, 20);
+            this.numericUpDown_serve.TabIndex = 12;
+            this.numericUpDown_serve.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label3.Location = new System.Drawing.Point(15, 150);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(122, 22);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Zmiana serwu";
+            // 
             // FriendlyMatchSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.numericUpDown_serve);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.button_var1);
             this.Controls.Add(this.button_var3);
             this.Controls.Add(this.button_var2);
@@ -168,6 +206,7 @@
             this.Text = "Friendly Match Settings";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_set)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_point)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_serve)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -183,5 +222,7 @@
         private System.Windows.Forms.Button button_var1;
         private System.Windows.Forms.Button button_var3;
         private System.Windows.Forms.Button button_var2;
+        private System.Windows.Forms.NumericUpDown numericUpDown_serve;
+        private System.Windows.Forms.Label label3;
     }
 }

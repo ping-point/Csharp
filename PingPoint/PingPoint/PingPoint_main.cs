@@ -44,6 +44,7 @@ namespace PingPoint
         decimal point_margin = 0; // Różnica punktów potrzebna do wygrania seta. 
         public static decimal tournament_id; // Id turnieju.
         public static decimal match_id; // Id meczu.
+        public static string tournament_type; // Przechowuje tryb turnieju.
         int points_id = 0; // Id punktu.
         int point1; // Ilość punktów zawodnika1.
         int point2; // Ilość punktów zawodnika2.
@@ -53,6 +54,9 @@ namespace PingPoint
         public static bool accept_set = false; // Zmienna określająca czy set został zaakceptowany i ma zostać przesłany do bazy.
         public static string my_login; // Zmienna przechowująca login z bazy danych.
         public static string my_password; // Zmienna przechowująca hasło z bazy danych.
+        bool serve_player1 = true; // Zmienna przechowująca kto serwuje.
+        public static decimal serve_number = 2;
+        int serve_points_old = 0; // Zmienna przechowująca poprzednią ilość sumy punktów zawodników w danym secie. (zmiana serwów)
 
         public PingPoint_main() // Funkcja inicjalizująca.
         {
@@ -135,6 +139,7 @@ namespace PingPoint
             point2 = last_point(2);
             label_points1.Text = point1.ToString();
             label_points2.Text = point2.ToString();
+
             //down
             if (point1 > 0)
             {
@@ -173,11 +178,41 @@ namespace PingPoint
             {
                 label_points_up2.Visible = false;
             }
+            // Zmiana serwowania piłeczki - co serve_naumer punktów.
+            if ((point1 + point2) % serve_number == 0 && (point1 + point2) > 0 && serve_points_old <= (point1 + point2) || serve_points_old % serve_number == 0 && serve_points_old > (point1 + point2) && (point1 + point2) > 0)
+            {
+                if (serve_player1 == true) // Serwował gracz 1
+                {
+                    serve_player1 = false; // Jak prawda to serwuje gracz 2
+                    pictureBox_serve2.Visible = true;
+                    pictureBox_serve1.Visible = false;
+                }
+                else
+                {
+                    serve_player1 = true; // Jak fałsz to serwuje gracz 1
+                    pictureBox_serve1.Visible = true;
+                    pictureBox_serve2.Visible = false;
+                }
+            }
+            serve_points_old = point1 + point2;
         }
 
         public void sets_update(int win) // Każdym razem gdy powinien się zmienić SET wywołaj tą funkcję.
         {
             int set = sets_player1 + sets_player2;
+            //// Zmiana zaczynającego przy serwach
+            if (set % 2 == 1)
+            {
+                serve_player1 = false; // Jak prawda to serwuje gracz 2
+                pictureBox_serve2.Visible = true;
+                pictureBox_serve1.Visible = false;
+            }
+            else
+            {
+                serve_player1 = true; // Jak fałsz to serwuje gracz 1
+                pictureBox_serve1.Visible = true;
+                pictureBox_serve2.Visible = false;
+            }
             //// Insert danych do tabeli punkty.
             string sql_add_points = "INSERT INTO punkty(numer_setu, punkt, mecze_id, punkty_id ) VALUES ";
             for (int i = 2; i < points.Count; i++)
@@ -251,7 +286,7 @@ namespace PingPoint
             //// Sprawdzenie czy jest to koniec meczu i który zawodnik wygrał.
             if(sets_player1 == set_max)
             {
-                endgame(point1);//wyzerować points_margin
+                endgame(point1);
             }
             else if(sets_player2 == set_max)
             {
@@ -259,7 +294,6 @@ namespace PingPoint
             }
             else // nie jest to koniec meczu.
             {
-                //wyzerować points_margin
                 label_set.Text = (set + 1).ToString();
                 points.Clear();
                 points_update();
@@ -283,6 +317,8 @@ namespace PingPoint
             pictureBox_point2_5.Visible = false;
             pictureBox_point2_6.Visible = false;
             pictureBox_point2_7.Visible = false;
+            pictureBox_serve1.Visible = false;
+            pictureBox_serve2.Visible = false;
             match_id = 0;
             points_id = 0;
             sets_player1 = 0;
@@ -337,92 +373,116 @@ namespace PingPoint
 
             if (listBox_rodzaj.SelectedItem.ToString() == "Turniej")
             {
-                // Robi UPDATE bazy danych date na dziś.
+                //// Robi UPDATE bazy danych date na dziś.
                 DateTime thisDay = DateTime.Today;
-                string sql_update_data = "UPDATE mecze SET data = '" + thisDay.ToString("d") + "' WHERE mecze_id = " + tournament_id;
+                string sql_update_data = "UPDATE mecze SET data = '" + thisDay.ToString("d") + "' WHERE mecze_id = " + match_id;
                 MySqlCommand cmd = new MySqlCommand(sql_update_data, conn);
                 cmd.ExecuteNonQuery();
 
-                //// Ogólne założenie: Gdy mecze turniejowe danego poziomu się skończą - połącz w pary graczy którzy wygrali swój mecz.
-                turniej = true;
-                //// Liczy ilość meczy które nie zostały rozegrane w pucharze
-                string sql = "SELECT COUNT(mecze_ID) from mecze where turnieje_ID = " + tournament_id +" AND data is null";
-                cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader rdr = cmd.ExecuteReader();
-                rdr.Read();
-                string value = rdr[0].ToString();
-                rdr.Close();
-                if (value == "0") //// Jeżeli zwróci 0 - wszystkie mecze się odbyły.
+                if(tournament_type == "pucharowy")//// Jeżeli jest to mecz pucharowy.
                 {
-                    //// Liczymy ilosc graczy.
-                    string sql_players = "SELECT COUNT(login) from gracze where login in (select gracz1_ID from mecze where turnieje_ID = ";
-                    sql_players += tournament_id + " UNION SELECT gracz2_ID from mecze where turnieje_ID = " + tournament_id + ")";
-                    cmd = new MySqlCommand(sql_players, conn);
-                    rdr = cmd.ExecuteReader();
+                    //// Ogólne założenie: Gdy mecze pucharowe danego poziomu się skończą - połącz w pary graczy którzy wygrali swój mecz.
+                    turniej = true;
+                    //// Liczy ilość meczy które nie zostały rozegrane w pucharze
+                    string sql = "SELECT COUNT(mecze_ID) from mecze where turnieje_ID = " + tournament_id + " AND data is null";
+                    cmd = new MySqlCommand(sql, conn);
+                    MySqlDataReader rdr = cmd.ExecuteReader();
                     rdr.Read();
-                    int N = Int32.Parse(rdr[0].ToString());
+                    string value = rdr[0].ToString();
                     rdr.Close();
-                    //// Liczymy ilosc meczy.
-                    string sql_match = "SELECT COUNT(mecze_ID) from mecze where turnieje_ID = " + tournament_id;
-                    cmd = new MySqlCommand(sql_match, conn);
-                    rdr = cmd.ExecuteReader();
-                    rdr.Read();
-                    int M = Int32.Parse(rdr[0].ToString());
-                    rdr.Close();
-                    while (M > N / 2)
+                    if (value == "0") //// Jeżeli zwróci 0 - wszystkie mecze się odbyły.
                     {
-                        M -= N / 2;
-                        N = N / 2;
-                    }
-                    //// Zauważmy że teraz M = ostatnie mecze.
-                    if (M > 0)
-                    {
-                        //// Wyciągam wygranych z tych meczy.
-                        string sql_winners = "SELECT punkt FROM punkty p INNER JOIN (SELECT mecze_id FROM mecze where turnieje_ID = ";
-                        sql_winners += tournament_id + " order by mecze_id DESC LIMIT " + M + ") as m USING(mecze_ID) where p.punkty_ID = (SELECT max(punkty_ID) from punkty WHERE mecze_ID = p.mecze_ID)";
-                        cmd = new MySqlCommand(sql_winners, conn);
+                        //// Liczymy ilosc graczy.
+                        string sql_players = "SELECT COUNT(login) from gracze where login in (select gracz1_ID from mecze where turnieje_ID = ";
+                        sql_players += tournament_id + " UNION SELECT gracz2_ID from mecze where turnieje_ID = " + tournament_id + ")";
+                        cmd = new MySqlCommand(sql_players, conn);
                         rdr = cmd.ExecuteReader();
                         rdr.Read();
-                        List<string> nowi = new List<string>();
-                        List<string> losers = new List<string>();
-                        DataTable data_winners = new DataTable();
-                        data_winners.Load(rdr);
+                        int N = Int32.Parse(rdr[0].ToString());
                         rdr.Close();
-                        //// Dodaje do listy 'nowi' wygranych.
-                        if (data_winners.Rows.Count > 0)
+                        //// Liczymy ilosc meczy.
+                        string sql_match = "SELECT COUNT(mecze_ID) from mecze where turnieje_ID = " + tournament_id;
+                        cmd = new MySqlCommand(sql_match, conn);
+                        rdr = cmd.ExecuteReader();
+                        rdr.Read();
+                        int M = Int32.Parse(rdr[0].ToString());
+                        rdr.Close();
+                        //// Gdy puchar się nie skończył (Ilość meczy != Ilość zawodników).
+                        if (M != N)
                         {
-                            foreach (DataRow row in data_winners.Rows)
+                            while (M > N / 2)
                             {
-                                nowi.Add(row["punkt"].ToString());
+                                M -= N / 2;
+                                N = N / 2;
                             }
-                        }
-                        //// Gdy wygranych jest 4 - zapisz ich - potrzebne do rozegrania meczu o 3 miejsce.
-                        if (nowi.Count == 4)
-                        {
-                            losers = nowi;
-                        }
-                        if (M == 2) //// Kiedy ostatnimi meczami były te z półfinału.
-                        {
-                            //// Usuwa wygranych z listy.
-                            string winner1 = nowi[0];
-                            string winner2 = nowi[1];
-                            losers.Remove(winner1);
-                            losers.Remove(winner2);
-                            //// Dodaje mecze o 3 miejsce i finalowe.
-                            string sql_add_final_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", " + nowi[0] + ", " + nowi[1] + ", null)";
-                            cmd = new MySqlCommand(sql_add_final_match, conn);
-                            cmd.ExecuteNonQuery();
-                            string sql_add_3rd_place_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", " + losers[0] + ", " + losers[1] + ", null)";
-                            cmd = new MySqlCommand(sql_add_3rd_place_match, conn);
-                            cmd.ExecuteNonQuery();
-                        }
-                        else //// Kiedy ostatnimi meczami były z większą liczbą meczy do zagrania. 
-                        {
-                            for (int i = 0; i < nowi.Count() / 2; i++)
+                            //// Zauważmy że teraz M = ostatnie mecze.
+                            if (M > 0)
                             {
-                                string sql_add_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", " + nowi[2 * i] + ", " + nowi[2 * i + 1] +", null)";
-                                cmd = new MySqlCommand(sql_add_match, conn);
-                                cmd.ExecuteNonQuery();
+                                //// Wyciągam wygranych z tych meczy. 
+                                string sql_winners = "SELECT punkt FROM punkty p INNER JOIN (SELECT mecze_id FROM mecze where turnieje_ID = ";
+                                sql_winners += tournament_id + " order by mecze_id DESC LIMIT " + M + ") as m USING(mecze_ID) where p.punkty_ID = (SELECT max(punkty_ID) from punkty WHERE mecze_ID = p.mecze_ID)";
+                                cmd = new MySqlCommand(sql_winners, conn);
+                                rdr = cmd.ExecuteReader();
+                                List<string> nowi = new List<string>();
+                                List<string> losers = new List<string>();
+                                DataTable data_winners = new DataTable();
+                                data_winners.Load(rdr);
+                                rdr.Close();
+                                //// Dodaje do listy 'nowi' wygranych.
+                                if (data_winners.Rows.Count > 0)
+                                {
+                                    foreach (DataRow row in data_winners.Rows)
+                                    {
+                                        nowi.Add(row["punkt"].ToString());
+                                    }
+                                }
+                                /*
+                                //// Gdy wygranych jest 4 - zapisz ich - potrzebne do rozegrania meczu o 3 miejsce.
+                                if (nowi.Count == 4)
+                                {
+                                    losers = nowi;
+                                }
+                                */
+                                if (M == 2) //// Kiedy ostatnimi meczami były te z półfinału.
+                                {
+                                    //// Dodaje wszystkich graczy z ostatnich dwóch meczy z turnieju pucharowego.
+                                    string sql_losers = "SELECT gracz1_ID, gracz2_ID FROM mecze where turnieje_ID = " + tournament_id + " order by mecze_id DESC LIMIT 2";
+                                    cmd = new MySqlCommand(sql_losers, conn);
+                                    rdr = cmd.ExecuteReader();
+                                    DataTable data_losers = new DataTable();
+                                    data_losers.Load(rdr);
+                                    rdr.Close();
+                                    //// Dodaje do listy 'losers' wszystkich.
+                                    if (data_losers.Rows.Count > 0)
+                                    {
+                                        foreach (DataRow row in data_losers.Rows)
+                                        {
+                                            losers.Add(row["gracz1_ID"].ToString());
+                                            losers.Add(row["gracz2_ID"].ToString());
+                                        }
+                                    }
+                                    //// Usuwa wygranych z listy.
+                                    string winner1 = nowi[0];
+                                    string winner2 = nowi[1];
+                                    losers.Remove(winner1);
+                                    losers.Remove(winner2);
+                                    //// Dodaje mecze o 3 miejsce i finalowe.
+                                    string sql_add_final_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", '" + nowi[0] + "', '" + nowi[1] + "', null)";
+                                    cmd = new MySqlCommand(sql_add_final_match, conn);
+                                    cmd.ExecuteNonQuery();
+                                    string sql_add_3rd_place_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", '" + losers[0] + "', '" + losers[1] + "', null)";
+                                    cmd = new MySqlCommand(sql_add_3rd_place_match, conn);
+                                    cmd.ExecuteNonQuery();
+                                }
+                                else //// Kiedy ostatnimi meczami były z większą liczbą meczy do zagrania. 
+                                {
+                                    for (int i = 0; i < nowi.Count() / 2; i++)
+                                    {
+                                        string sql_add_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", " + nowi[2 * i] + ", " + nowi[2 * i + 1] + ", null)";
+                                        cmd = new MySqlCommand(sql_add_match, conn);
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                }
                             }
                         }
                     }
@@ -459,6 +519,9 @@ namespace PingPoint
             {
                 cleanup(false);
                 //// Zmień atrybut Visible na true 
+                label_player1.Visible = true;
+                label_player2.Visible = true;
+                pictureBox_serve1.Visible = true;
                 panel_sets1.Visible = true;
                 panel_sets2.Visible = true;
                 label_static_set.Visible = true;
@@ -595,8 +658,11 @@ namespace PingPoint
                     {
                         //// Sprawdzanie dostępnych nierozegranych meczy dla zalogowanych zawodników.
                         List<string> tablica = new List<string>();
-                        string tournament_id = "SELECT turnieje_id FROM mecze WHERE gracz1_id = '" + label_player1.Text + "' ";
-                        tournament_id += "AND gracz2_id = '" + label_player2.Text + "' AND data IS NULL AND turnieje_id IS NOT NULL";
+                        //string tournament_id = "WHERE ((gracz1_id = '" + label_player1.Text + "' AND gracz2_id = '" + label_player2.Text;
+                        //tournament_id += "') OR (gracz1_id = '" + label_player2.Text + "' AND gracz2_id = '" + label_player1.Text + "')) AND data IS NULL AND turnieje_id IS NOT NULL";
+                        string tournament_id = "SELECT turnieje_id FROM mecze WHERE (gracz1_id = '" + label_player1.Text + "' ";
+                        tournament_id += "AND gracz2_id = '" + label_player2.Text + "') OR (gracz1_id = '" + label_player2.Text + "' ";
+                        tournament_id += "AND gracz2_id = '" + label_player1.Text + "') AND data IS NULL AND turnieje_id IS NOT NULL";
                         MySqlCommand cmd_id = new MySqlCommand(tournament_id, conn);
                         MySqlDataReader rdr = cmd_id.ExecuteReader();
                         DataTable data_tournament_id = new DataTable();
@@ -730,7 +796,7 @@ namespace PingPoint
         {
             point k = new point(2, point2);
             points.Remove(k);
-            if (point2 - point1 > 0 && point_margin > 0) // TODO: by można było wygrać odejmując punkt jak jest margin > 0
+            if (point2 - point1 > 0 && point_margin > 0)
             {
                 point_margin--;
             }

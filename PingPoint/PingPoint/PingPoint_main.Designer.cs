@@ -64,6 +64,8 @@
             this.pictureBox_point1_4 = new System.Windows.Forms.PictureBox();
             this.pictureBox_point1_2 = new System.Windows.Forms.PictureBox();
             this.pictureBox_point1_1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_serve1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_serve2 = new System.Windows.Forms.PictureBox();
             this.panel_sets2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point2_7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point2_3)).BeginInit();
@@ -80,6 +82,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point1_4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point1_2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point1_1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_serve1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_serve2)).BeginInit();
             this.SuspendLayout();
             // 
             // button_exit
@@ -494,12 +498,36 @@
             this.pictureBox_point1_1.TabStop = false;
             this.pictureBox_point1_1.Visible = false;
             // 
+            // pictureBox_serve1
+            // 
+            this.pictureBox_serve1.Image = global::PingPoint.Properties.Resources.serve;
+            this.pictureBox_serve1.Location = new System.Drawing.Point(360, 48);
+            this.pictureBox_serve1.Name = "pictureBox_serve1";
+            this.pictureBox_serve1.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox_serve1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox_serve1.TabIndex = 53;
+            this.pictureBox_serve1.TabStop = false;
+            this.pictureBox_serve1.Visible = false;
+            // 
+            // pictureBox_serve2
+            // 
+            this.pictureBox_serve2.Image = global::PingPoint.Properties.Resources.serve;
+            this.pictureBox_serve2.Location = new System.Drawing.Point(528, 48);
+            this.pictureBox_serve2.Name = "pictureBox_serve2";
+            this.pictureBox_serve2.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox_serve2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox_serve2.TabIndex = 54;
+            this.pictureBox_serve2.TabStop = false;
+            this.pictureBox_serve2.Visible = false;
+            // 
             // PingPoint_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 562);
             this.ControlBox = false;
+            this.Controls.Add(this.pictureBox_serve2);
+            this.Controls.Add(this.pictureBox_serve1);
             this.Controls.Add(this.panel_sets1);
             this.Controls.Add(this.label_static_set);
             this.Controls.Add(this.panel_sets2);
@@ -542,6 +570,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point1_4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point1_2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_point1_1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_serve1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_serve2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -585,6 +615,8 @@
         private System.Windows.Forms.PictureBox pictureBox_point1_2;
         private System.Windows.Forms.PictureBox pictureBox_point1_1;
         private System.Windows.Forms.PictureBox pictureBox_point2_1;
+        private System.Windows.Forms.PictureBox pictureBox_serve1;
+        private System.Windows.Forms.PictureBox pictureBox_serve2;
     }
 }
 
