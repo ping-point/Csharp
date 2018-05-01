@@ -478,7 +478,7 @@ namespace PingPoint
                                 {
                                     for (int i = 0; i < nowi.Count() / 2; i++)
                                     {
-                                        string sql_add_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", " + nowi[2 * i] + ", " + nowi[2 * i + 1] + ", null)";
+                                        string sql_add_match = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(" + tournament_id + ", '" + nowi[2 * i] + "', '" + nowi[2 * i + 1] + "', null)";
                                         cmd = new MySqlCommand(sql_add_match, conn);
                                         cmd.ExecuteNonQuery();
                                     }
@@ -550,7 +550,7 @@ namespace PingPoint
                 //// Odczytaj z bazy danych 'match_id' bieżącego meczu (turniej), lub stwórz cały mecz (towarzyski). 
                 if(listBox_rodzaj.SelectedItem.ToString() == "Turniej") //// Odczytanie 'match_id' z bazy danych
                 {
-                    string sql = "SELECT mecze_id FROM mecze WHERE turnieje_ID = " + tournament_id + " AND gracz1_id = '" + label_player1.Text + "' AND gracz2_id = '" + label_player2.Text + "' AND data IS NULL";
+                    string sql = "SELECT mecze_id FROM mecze WHERE turnieje_ID = " + tournament_id + " AND (gracz1_id = '"+label_player1.Text+ "' AND gracz2_id = '" + label_player2.Text + "') OR (gracz1_id = '" + label_player2.Text + "' AND gracz2_id = '" + label_player1.Text + "') AND data IS NULL";
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
                     MySqlDataReader rdr = cmd.ExecuteReader();
                     if (rdr.Read()) match_id = Int32.Parse(rdr[0].ToString());
