@@ -45,7 +45,7 @@ namespace PingPoint
                 }
                 else
                 {
-                    MessageBox.Show("Brak turniejów.");
+                    rdr2.Close();
                 }
             }
         }

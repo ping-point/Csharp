@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Windows;
+//using System.Threading;
 
 public struct point
 {
@@ -26,6 +27,12 @@ namespace PingPoint
 {
     public partial class PingPoint_main : Form
     {
+        // Nowy wątek do odbierania i wysyłania sygnałów aplikacji C++.
+        static bool endCppConn = false;
+        public static int recivedPointSide = -1; //strona po której zdobyto punkt (0 - lewo, 1 - prawo)
+        // Jest to alternatywa dla nowego wątku
+        Timer timer = new Timer();
+
         // Connection strings - przez PuTTY oraz z wydziału. 
         protected static string ConnString = "SERVER=127.0.0.1; Port=5432; DATABASE=pz2017_10; UID=pz2017_10; PASSWORD=vV8bdtj2fGMhaG2u;"; // PuTTY.
         //protected static string ConnString = "SERVER=labsql; Port=3306; DATABASE=pz2017_10; UID=pz2017_10; PASSWORD=vV8bdtj2fGMhaG2u;"; // Wydział.
@@ -57,13 +64,74 @@ namespace PingPoint
         bool serve_player1 = true; // Zmienna przechowująca kto serwuje.
         public static decimal serve_number = 2;
         int serve_points_old = 0; // Zmienna przechowująca poprzednią ilość sumy punktów zawodników w danym secie. (zmiana serwów)
+        NamedPipeServer PServer1 = new NamedPipeServer(@"\\.\pipe\myNamedPipe1", 0);
+        NamedPipeServer PServer2 = new NamedPipeServer(@"\\.\pipe\myNamedPipe2", 1);
+        bool free = true;
 
         public PingPoint_main() // Funkcja inicjalizująca.
         {
             InitializeComponent();
         }
 
-        private bool OpenConnection() // Funkcja otwierająca połączenie z bazą danych.
+        void startConnectCpp()
+        {
+            PServer1.Start();
+            PServer2.Start();
+
+            timer.Interval = 100; // Czy tyle wystarczy?
+            timer.Tick += new EventHandler(connectCpp);
+        } // Otworzenie połączenia z C++
+
+        void stopConnectCpp()
+        {
+            PServer1.StopServer();
+            PServer2.StopServer();
+        } // Zamknięcie połączenia z C++
+        
+        private void connectCpp(object sender, EventArgs e)
+        {
+            if (free == true && recivedPointSide != -1)
+            {
+                free = false;
+                int set = sets_player1 + sets_player2;
+                string Ms = null;
+                if (recivedPointSide == 0)
+                {
+                    if (set % 2 == 0) //Gracz jest po stronie startowej
+                    {
+                        //punkt dla gracza 1
+                        label_points_up1_Click(null, null);
+                    }
+                    else //nie przetestowane !! TODO!!
+                    {
+                        //punkt dla gracza 2
+                        label_points_up2_Click(null, null);
+                    }
+
+                }
+                else if (recivedPointSide == 1)
+                {
+                    if (set % 2 == 0) //Gracz jest po stronie startowej
+                    {
+                        //punkt dla gracza 2
+                        label_points_up2_Click(null, null);
+                    }
+                    else
+                    {
+                        //punkt dla gracza 1
+                        label_points_up1_Click(null, null);
+                    }
+                }
+                if (Ms != null)
+                {
+                    PServer2.SendMessage(Ms, PServer2.clientse);
+                }
+                free = true;
+                recivedPointSide = -1;
+            }
+        } // Zbieranie i wysyłanie sygnałów do C++ TODO
+
+        private bool OpenConnection() // Funkcja otwierająca połączenie z bazą danych, oraz z c++.
         {
             try
             {
@@ -93,7 +161,7 @@ namespace PingPoint
             }
         }
 
-        private bool CloseConnection() // Funkcja zamykająca połączenie z bazą danych.
+        private bool CloseConnection() // Funkcja zamykająca połączenie z bazą danych, oraz z c++.
         {
             try
             {
@@ -110,11 +178,13 @@ namespace PingPoint
         private void PingPoint_main_Load(object sender, EventArgs e) // Funkcja obsługująca event załadowania PingPoint_main.
         {
             OpenConnection();
+            startConnectCpp();
         }
 
         private void button_exit_Click(object sender, EventArgs e) // Funkcja obsługująca event kliknięcia na button_exit.
         {
             CloseConnection();
+            stopConnectCpp();
             Application.Exit();
         }
 
@@ -200,7 +270,8 @@ namespace PingPoint
         public void sets_update(int win) // Każdym razem gdy powinien się zmienić SET wywołaj tą funkcję.
         {
             int set = sets_player1 + sets_player2;
-            //// Zmiana zaczynającego przy serwach
+            //// Zmiana zaczynającego przy serwach - zmiana stron więc gracz który przegrał będzie zaczynał
+            /*
             if (set % 2 == 1)
             {
                 serve_player1 = false; // Jak prawda to serwuje gracz 2
@@ -213,6 +284,7 @@ namespace PingPoint
                 pictureBox_serve1.Visible = true;
                 pictureBox_serve2.Visible = false;
             }
+            */
             //// Insert danych do tabeli punkty.
             string sql_add_points = "INSERT INTO punkty(numer_setu, punkt, mecze_id, punkty_id ) VALUES ";
             for (int i = 2; i < points.Count; i++)
@@ -357,8 +429,9 @@ namespace PingPoint
             }
         }
 
-        public void endgame(int win) // Funkcja wywoływana przy skończeniu meczu. TODO: należy sprawdzić czy algorytm działa na prawdziwych danych (turniej).
+        public void endgame(int win) // Funkcja wywoływana przy skończeniu meczu.
         {
+            timer.Stop();
             string winner;
             bool turniej = false;
             if (win == point1)
@@ -373,6 +446,7 @@ namespace PingPoint
 
             if (listBox_rodzaj.SelectedItem.ToString() == "Turniej")
             {
+                turniej = true;
                 //// Robi UPDATE bazy danych date na dziś.
                 DateTime thisDay = DateTime.Today;
                 string sql_update_data = "UPDATE mecze SET data = '" + thisDay.ToString("d") + "' WHERE mecze_id = " + match_id;
@@ -382,7 +456,6 @@ namespace PingPoint
                 if(tournament_type == "pucharowy")//// Jeżeli jest to mecz pucharowy.
                 {
                     //// Ogólne założenie: Gdy mecze pucharowe danego poziomu się skończą - połącz w pary graczy którzy wygrali swój mecz.
-                    turniej = true;
                     //// Liczy ilość meczy które nie zostały rozegrane w pucharze
                     string sql = "SELECT COUNT(mecze_ID) from mecze where turnieje_ID = " + tournament_id + " AND data is null";
                     cmd = new MySqlCommand(sql, conn);
@@ -436,13 +509,6 @@ namespace PingPoint
                                         nowi.Add(row["punkt"].ToString());
                                     }
                                 }
-                                /*
-                                //// Gdy wygranych jest 4 - zapisz ich - potrzebne do rozegrania meczu o 3 miejsce.
-                                if (nowi.Count == 4)
-                                {
-                                    losers = nowi;
-                                }
-                                */
                                 if (M == 2) //// Kiedy ostatnimi meczami były te z półfinału.
                                 {
                                     //// Dodaje wszystkich graczy z ostatnich dwóch meczy z turnieju pucharowego.
@@ -561,7 +627,7 @@ namespace PingPoint
                     }
                     rdr.Close();  
                 }
-                else //// Dodanie meczu towarzyskiego. - działa!
+                else //// Dodanie meczu towarzyskiego.
                 {
                     DateTime thisDay = DateTime.Today;
                     string sql_add = "INSERT INTO mecze(turnieje_ID, gracz1_id, gracz2_id, data) VALUES(null , '" + label_player1.Text + "', '" + label_player2.Text + "', '" + thisDay.ToString("d") + "')";
@@ -574,6 +640,7 @@ namespace PingPoint
                     match_id = Int32.Parse(rdr[0].ToString());
                     rdr.Close();
                 }
+                timer.Start(); // rozpoczecie sprawdzania sygnałów z C++ 
             }
             //// Wywołaj odpowiednie komunikaty w wypadku błędu zaczęcia gry.
             else if(logged1 && choosed) MessageBox.Show("Player 2 is not logged in!");
@@ -641,10 +708,13 @@ namespace PingPoint
         {
             if(checkBox_auto.Checked == true)
             {
-                //otrzymuj sygnały z programu Michała i dodawaj pkt
+                //Tworzenie nowego procesu, który komunikuje się z c++
+                startConnectCpp();
             }
             else
             {
+                timer.Stop();
+                stopConnectCpp();
             }
         }
 
@@ -660,9 +730,9 @@ namespace PingPoint
                         List<string> tablica = new List<string>();
                         //string tournament_id = "WHERE ((gracz1_id = '" + label_player1.Text + "' AND gracz2_id = '" + label_player2.Text;
                         //tournament_id += "') OR (gracz1_id = '" + label_player2.Text + "' AND gracz2_id = '" + label_player1.Text + "')) AND data IS NULL AND turnieje_id IS NOT NULL";
-                        string tournament_id = "SELECT turnieje_id FROM mecze WHERE (gracz1_id = '" + label_player1.Text + "' ";
+                        string tournament_id = "SELECT turnieje_id FROM mecze WHERE (((gracz1_id = '" + label_player1.Text + "' ";
                         tournament_id += "AND gracz2_id = '" + label_player2.Text + "') OR (gracz1_id = '" + label_player2.Text + "' ";
-                        tournament_id += "AND gracz2_id = '" + label_player1.Text + "') AND data IS NULL AND turnieje_id IS NOT NULL";
+                        tournament_id += "AND gracz2_id = '" + label_player1.Text + "')) AND data IS NULL) AND turnieje_id IS NOT NULL";
                         MySqlCommand cmd_id = new MySqlCommand(tournament_id, conn);
                         MySqlDataReader rdr = cmd_id.ExecuteReader();
                         DataTable data_tournament_id = new DataTable();

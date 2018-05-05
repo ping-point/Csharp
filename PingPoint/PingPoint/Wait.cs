@@ -16,6 +16,7 @@ namespace PingPoint
         public Wait(string win)
         {
             InitializeComponent();
+            
             winner = win;
             label_info_win.Text = "Set wygrywa: " + winner;
         }

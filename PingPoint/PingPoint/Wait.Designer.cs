@@ -77,11 +77,13 @@
             this.Controls.Add(this.label_next_set);
             this.Controls.Add(this.label_info_win);
             this.Controls.Add(this.label_change);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MinimizeBox = false;
             this.Name = "Wait";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Koniec seta!";
             this.ResumeLayout(false);
 
         }

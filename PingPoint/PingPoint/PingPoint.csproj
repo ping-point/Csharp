@@ -24,7 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.2.0.%2a</ApplicationVersion>
+    <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -81,6 +81,7 @@
     <Compile Include="Endgame.Designer.cs">
       <DependentUpon>Endgame.cs</DependentUpon>
     </Compile>
+    <Compile Include="NamedPipeServer.cs" />
     <Compile Include="PingPoint_main.cs">
       <SubType>Form</SubType>
     </Compile>
