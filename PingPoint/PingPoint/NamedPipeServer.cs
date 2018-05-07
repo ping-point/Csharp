@@ -50,7 +50,6 @@ namespace PingPoint
         {
             pipeName = PName;
             ClientType = Mode;//0 Reading Pipe, 1 Writing Pipe
-
         }
        
         public void Start()
@@ -62,9 +61,7 @@ namespace PingPoint
         {
             while (true)
             {
-
                 clientHandle =CreateNamedPipe(this.pipeName,DUPLEX | FILE_FLAG_OVERLAPPED,0,255,BUFFER_SIZE,BUFFER_SIZE,0,IntPtr.Zero);
-
                 //could not create named pipe
                 if (clientHandle.IsInvalid)
                     return;
@@ -124,8 +121,7 @@ namespace PingPoint
                     {
                         ReadLength++;
                     }
-                    else
-                        break;
+                    else break;
                 }
                 if (ReadLength > 0)
                 {
@@ -135,17 +131,13 @@ namespace PingPoint
                     Console.WriteLine("C# App: Received " + ReadLength +" Bytes: "+ encoder.GetString(Rc, 0, ReadLength));
                     buffer.Initialize();
                 }
-               
             }
-
             //clean up resources
             clientse.stream.Close();
             clientse.handle.Close();
-            
         }
         public void SendMessage(string message, Client client)
         {
-
                 ASCIIEncoding encoder = new ASCIIEncoding();
                 byte[] messageBuffer = encoder.GetBytes(message);
 
@@ -154,16 +146,11 @@ namespace PingPoint
                     client.stream.Write(messageBuffer, 0, messageBuffer.Length);
                     client.stream.Flush();
                 }
-
-
         }
         public void StopServer()
         {
             //clean up resources
-
             DisconnectNamedPipe(this.clientHandle);
-            
-
             this.listenThread.Abort();
         }
 

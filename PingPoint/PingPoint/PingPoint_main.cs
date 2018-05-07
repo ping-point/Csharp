@@ -28,7 +28,6 @@ namespace PingPoint
     public partial class PingPoint_main : Form
     {
         // Nowy wątek do odbierania i wysyłania sygnałów aplikacji C++.
-        static bool endCppConn = false;
         public static int recivedPointSide = -1; //strona po której zdobyto punkt (0 - lewo, 1 - prawo)
         // Jest to alternatywa dla nowego wątku
         Timer timer = new Timer();
@@ -62,6 +61,7 @@ namespace PingPoint
         public static string my_login; // Zmienna przechowująca login z bazy danych.
         public static string my_password; // Zmienna przechowująca hasło z bazy danych.
         bool serve_player1 = true; // Zmienna przechowująca kto serwuje.
+        int serve_player_start;
         public static decimal serve_number = 2;
         int serve_points_old = 0; // Zmienna przechowująca poprzednią ilość sumy punktów zawodników w danym secie. (zmiana serwów)
         NamedPipeServer PServer1 = new NamedPipeServer(@"\\.\pipe\myNamedPipe1", 0);
@@ -138,6 +138,7 @@ namespace PingPoint
                 conn.Open();
                 MySqlCommand comm = conn.CreateCommand();
                 this.label_baza.Text = "ONLINE";
+                this.label_baza.ForeColor = Color.FromArgb(2, 100, 125);
                 return true;
             }
             catch (MySqlException ex) //// Wypisuje najbardziej znane przyczyny wystąpienia błędu połączenia.
@@ -271,20 +272,37 @@ namespace PingPoint
         {
             int set = sets_player1 + sets_player2;
             //// Zmiana zaczynającego przy serwach - zmiana stron więc gracz który przegrał będzie zaczynał
-            /*
-            if (set % 2 == 1)
+            if(serve_player_start == 0) // Gdy zaczynał gracz 1
             {
-                serve_player1 = false; // Jak prawda to serwuje gracz 2
-                pictureBox_serve2.Visible = true;
-                pictureBox_serve1.Visible = false;
+                if (set % 2 == 1)
+                {
+                    serve_player1 = false; // Jak prawda to serwuje gracz 2
+                    pictureBox_serve2.Visible = true;
+                    pictureBox_serve1.Visible = false;
+                }
+                else
+                {
+                    serve_player1 = true; // Jak fałsz to serwuje gracz 1
+                    pictureBox_serve1.Visible = true;
+                    pictureBox_serve2.Visible = false;
+                }
             }
-            else
+            else // Gdy zaczynał gracz 2
             {
-                serve_player1 = true; // Jak fałsz to serwuje gracz 1
-                pictureBox_serve1.Visible = true;
-                pictureBox_serve2.Visible = false;
+                if (set % 2 == 1)
+                {
+                    serve_player1 = true; // Jak fałsz to serwuje gracz 1
+                    pictureBox_serve1.Visible = true;
+                    pictureBox_serve2.Visible = false;
+                }
+                else
+                {
+                    serve_player1 = false; // Jak prawda to serwuje gracz 2
+                    pictureBox_serve2.Visible = true;
+                    pictureBox_serve1.Visible = false;
+                }
             }
-            */
+
             //// Insert danych do tabeli punkty.
             string sql_add_points = "INSERT INTO punkty(numer_setu, punkt, mecze_id, punkty_id ) VALUES ";
             for (int i = 2; i < points.Count; i++)
@@ -423,6 +441,8 @@ namespace PingPoint
                 logged1 = false;
                 logged2 = false;
                 listBox_rodzaj.ClearSelected();
+                button_login1.Text = "Zaloguj gracza1";
+                button_login2.Text = "Zaloguj gracza2";
                 label_player1.Text = "Zawodnik1";
                 label_player2.Text = "Zawodnik2";
                 choosed = false;
@@ -584,10 +604,22 @@ namespace PingPoint
             if(logged1 && logged2 && choosed)
             {
                 cleanup(false);
+                //// Losowanie która osoba zaczyna
+                Random rand = new Random(System.DateTime.Now.Millisecond);
+                serve_player_start = rand.Next(0, 2);
+                if (serve_player_start == 0)
+                {
+                    serve_player1 = true;
+                    pictureBox_serve1.Visible = true;
+                }
+                else
+                {
+                    serve_player1 = false;
+                    pictureBox_serve2.Visible = true;
+                }
                 //// Zmień atrybut Visible na true 
                 label_player1.Visible = true;
                 label_player2.Visible = true;
-                pictureBox_serve1.Visible = true;
                 panel_sets1.Visible = true;
                 panel_sets2.Visible = true;
                 label_static_set.Visible = true;
@@ -667,6 +699,7 @@ namespace PingPoint
                         label_player1.Text = my_login;
                         label_player1.Visible = true;
                         logged1 = true;
+                        button_login1.Text = "Przeloguj " + my_login;
                     }
                     else MessageBox.Show("Bledne haslo!");
                 }
@@ -695,6 +728,7 @@ namespace PingPoint
                         label_player2.Text = my_login;
                         label_player2.Visible = true;
                         logged2 = true;
+                        button_login2.Text = "Przeloguj " + my_login;
                     }
                     else MessageBox.Show("Bledne haslo!");
                 }

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
-  <asmv1:assemblyIdentity name="PingPoint.exe" version="2.2.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
+  <asmv1:assemblyIdentity name="PingPoint.exe" version="3.1.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="PingPoint" version="2.2.0.0" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="PingPoint" version="3.1.0.0" language="neutral" processorArchitecture="msil" />
     <commandLine file="PingPoint.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PingPoint.exe" size="926176">
-      <assemblyIdentity name="PingPoint" version="2.2.0.0" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PingPoint.exe" size="1062368">
+      <assemblyIdentity name="PingPoint" version="3.1.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>qQ7xG6rHU7J5TXjk07vdxl11bee58u7LV1aWGZAKiCs=</dsig:DigestValue>
+        <dsig:DigestValue>mMtc43S6cmIsaX6YV+4EEJv/pvHVfkPromnTfMONz/A=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -74,13 +74,13 @@
       <dsig:DigestValue>jWVCngsqgsEdPtxOoE7SAK7f6h1++LmE6IqOl8/1R3A=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Resources\point.png" size="53206">
+  <file name="Resources\icon.ico" size="21822">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>DIgEPnjYcxbZKXzi9huwWE7QtlL2eb7QT3H9vEJehGs=</dsig:DigestValue>
+      <dsig:DigestValue>rgt/enbfGJOfqQElPf91fecIk0lwTSXy9JBsQ6NmTpE=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>
