@@ -64,9 +64,9 @@ namespace PingPoint
         int serve_player_start;
         public static decimal serve_number = 2;
         int serve_points_old = 0; // Zmienna przechowująca poprzednią ilość sumy punktów zawodników w danym secie. (zmiana serwów)
-        NamedPipeServer PServer1 = new NamedPipeServer(@"\\.\pipe\myNamedPipe1", 0);
-        NamedPipeServer PServer2 = new NamedPipeServer(@"\\.\pipe\myNamedPipe2", 1);
-        bool free = true;
+        NamedPipeServer PServer1 = new NamedPipeServer(@"\\.\pipe\myNamedPipe1", 0); // Odbieranie sygnałów.
+        //NamedPipeServer PServer2 = new NamedPipeServer(@"\\.\pipe\myNamedPipe2", 1); // Wysyłanie sygnałów.
+        bool free = true; // Zmienna która ogranicza wywołania funkcji przez timer
 
         public PingPoint_main() // Funkcja inicjalizująca.
         {
@@ -76,7 +76,7 @@ namespace PingPoint
         void startConnectCpp()
         {
             PServer1.Start();
-            PServer2.Start();
+            //PServer2.Start();
 
             timer.Interval = 100; // Czy tyle wystarczy?
             timer.Tick += new EventHandler(connectCpp);
@@ -85,7 +85,7 @@ namespace PingPoint
         void stopConnectCpp()
         {
             PServer1.StopServer();
-            PServer2.StopServer();
+            //PServer2.StopServer();
         } // Zamknięcie połączenia z C++
         
         private void connectCpp(object sender, EventArgs e)
@@ -94,7 +94,7 @@ namespace PingPoint
             {
                 free = false;
                 int set = sets_player1 + sets_player2;
-                string Ms = null;
+                //string Ms = null;
                 if (recivedPointSide == 0)
                 {
                     if (set % 2 == 0) //Gracz jest po stronie startowej
@@ -102,7 +102,7 @@ namespace PingPoint
                         //punkt dla gracza 1
                         label_points_up1_Click(null, null);
                     }
-                    else //nie przetestowane !! TODO!!
+                    else
                     {
                         //punkt dla gracza 2
                         label_points_up2_Click(null, null);
@@ -122,14 +122,16 @@ namespace PingPoint
                         label_points_up1_Click(null, null);
                     }
                 }
+                /*
                 if (Ms != null)
                 {
                     PServer2.SendMessage(Ms, PServer2.clientse);
                 }
+                */
                 free = true;
                 recivedPointSide = -1;
             }
-        } // Zbieranie i wysyłanie sygnałów do C++ TODO
+        } // Zbieranie i wysyłanie sygnałów do C++
 
         private bool OpenConnection() // Funkcja otwierająca połączenie z bazą danych, oraz z c++.
         {
@@ -211,24 +213,14 @@ namespace PingPoint
             label_points1.Text = point1.ToString();
             label_points2.Text = point2.ToString();
 
-            //down
-            if (point1 > 0)
+            // revert
+            if (point2 > 0 || point1 > 0)
             {
-                label_points_down1.Visible = true;
-                label_points_down1.Text = (point1 - 1).ToString();
+                label_points_revert.Visible = true;
             }
             else
             {
-                label_points_down1.Visible = false;
-            }
-            if (point2 > 0)
-            {
-                label_points_down2.Visible = true;
-                label_points_down2.Text = (point2 - 1).ToString();
-            }
-            else
-            {
-                label_points_down2.Visible = false;
+                label_points_revert.Visible = false;
             }
             //up
             if (point1 < point_max + point_margin)
@@ -386,6 +378,10 @@ namespace PingPoint
             {
                 label_set.Text = (set + 1).ToString();
                 points.Clear();
+                p = new point(1, 0);
+                points.Add(p);
+                p = new point(2, 0);
+                points.Add(p);
                 points_update();
             }           
         }
@@ -580,8 +576,8 @@ namespace PingPoint
             }
             //// Po zakończeniu każdego meczu następuje zmiana wartości niektórych elementów i wyświetlenie Endgame.
             Endgame end = new Endgame(winner, turniej);
-            label_points_down1.Visible = false;
-            label_points_down2.Visible = false;
+            //label_points_down1.Visible = false;
+            label_points_revert.Visible = false;
             label_points_up1.Visible = false;
             label_points_up2.Visible = false;
             end.ShowDialog();
@@ -833,38 +829,6 @@ namespace PingPoint
              }
         }
 
-        private void label_points_down1_Click(object sender, EventArgs e) // Funkcja obsługująca odjęcie punktu zawodnika1.
-        {
-            point k = new point(1, point1);
-            points.Remove(k);
-            if(point1 - point2 > 0 && point_margin > 0)
-            {
-                point_margin--;
-            }
-            if (point2 - point1 > 0 && point_margin > 0)
-            {
-                point_margin--;
-            }
-            points_update();
-            if (point2 >= point_max + point_margin)
-            {
-                Wait agree = new Wait(label_player2.Text);
-                agree.ShowDialog();
-                if (accept_set == false) //// Gdy set zostanie zaakceptowany przez obu graczy dodaje set.
-                {
-                    point_margin = 0;
-                    sets_player2++;
-                    sets_update(point2);
-                }
-                else
-                {
-                    points.Add(k);
-                    point_margin++;
-                    points_update();
-                }
-            }
-        }
-
         private void label_points_up2_Click(object sender, EventArgs e) // Funkcja obsługująca dodanie punktu zawodnika2.
         {
             point k = new point(2, point2 + 1);
@@ -895,10 +859,10 @@ namespace PingPoint
                 }
             }
         }
-
-        private void label_points_down2_Click(object sender, EventArgs e) // Funkcja obsługująca odjęcie punktu zawodnika2.
+        
+        private void label_points_revert_Click(object sender, EventArgs e)
         {
-            point k = new point(2, point2);
+            point k = points.Last();
             points.Remove(k);
             if (point2 - point1 > 0 && point_margin > 0)
             {
@@ -918,6 +882,23 @@ namespace PingPoint
                     point_margin = 0;
                     sets_player1++;
                     sets_update(point1);
+                }
+                else
+                {
+                    points.Add(k);
+                    point_margin++;
+                    points_update();
+                }
+            }
+            if (point2 >= point_max + point_margin)
+            {
+                Wait agree = new Wait(label_player2.Text);
+                agree.ShowDialog();
+                if (accept_set == false) //// Gdy set zostanie zaakceptowany przez obu graczy dodaje set.
+                {
+                    point_margin = 0;
+                    sets_player2++;
+                    sets_update(point2);
                 }
                 else
                 {

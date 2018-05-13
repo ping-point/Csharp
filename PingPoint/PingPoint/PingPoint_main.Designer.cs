@@ -41,9 +41,8 @@
             this.label_player1 = new System.Windows.Forms.Label();
             this.label_player2 = new System.Windows.Forms.Label();
             this.label_colon = new System.Windows.Forms.Label();
-            this.label_points_down2 = new System.Windows.Forms.Label();
+            this.label_points_revert = new System.Windows.Forms.Label();
             this.label_points_up2 = new System.Windows.Forms.Label();
-            this.label_points_down1 = new System.Windows.Forms.Label();
             this.label_points_up1 = new System.Windows.Forms.Label();
             this.label_points2 = new System.Windows.Forms.Label();
             this.label_points1 = new System.Windows.Forms.Label();
@@ -231,26 +230,26 @@
             // 
             this.label_colon.Font = new System.Drawing.Font("Microsoft Sans Serif", 60F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label_colon.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(100)))), ((int)(((byte)(125)))));
-            this.label_colon.Location = new System.Drawing.Point(440, 173);
+            this.label_colon.Location = new System.Drawing.Point(440, 280);
             this.label_colon.Name = "label_colon";
-            this.label_colon.Size = new System.Drawing.Size(50, 360);
+            this.label_colon.Size = new System.Drawing.Size(50, 150);
             this.label_colon.TabIndex = 46;
             this.label_colon.Text = ":";
             this.label_colon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_colon.Visible = false;
             // 
-            // label_points_down2
+            // label_points_revert
             // 
-            this.label_points_down2.Font = new System.Drawing.Font("Microsoft Sans Serif", 50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label_points_down2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(88)))), ((int)(((byte)(106)))));
-            this.label_points_down2.Location = new System.Drawing.Point(470, 430);
-            this.label_points_down2.Name = "label_points_down2";
-            this.label_points_down2.Size = new System.Drawing.Size(300, 130);
-            this.label_points_down2.TabIndex = 45;
-            this.label_points_down2.Text = "9";
-            this.label_points_down2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label_points_down2.Visible = false;
-            this.label_points_down2.Click += new System.EventHandler(this.label_points_down2_Click);
+            this.label_points_revert.Font = new System.Drawing.Font("Microsoft Sans Serif", 50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label_points_revert.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(88)))), ((int)(((byte)(106)))));
+            this.label_points_revert.Location = new System.Drawing.Point(173, 430);
+            this.label_points_revert.Name = "label_points_revert";
+            this.label_points_revert.Size = new System.Drawing.Size(597, 130);
+            this.label_points_revert.TabIndex = 45;
+            this.label_points_revert.Text = "Popraw punkt";
+            this.label_points_revert.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label_points_revert.Visible = false;
+            this.label_points_revert.Click += new System.EventHandler(this.label_points_revert_Click);
             // 
             // label_points_up2
             // 
@@ -264,19 +263,6 @@
             this.label_points_up2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_points_up2.Visible = false;
             this.label_points_up2.Click += new System.EventHandler(this.label_points_up2_Click);
-            // 
-            // label_points_down1
-            // 
-            this.label_points_down1.Font = new System.Drawing.Font("Microsoft Sans Serif", 50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label_points_down1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(88)))), ((int)(((byte)(106)))));
-            this.label_points_down1.Location = new System.Drawing.Point(160, 430);
-            this.label_points_down1.Name = "label_points_down1";
-            this.label_points_down1.Size = new System.Drawing.Size(300, 130);
-            this.label_points_down1.TabIndex = 43;
-            this.label_points_down1.Text = "9";
-            this.label_points_down1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label_points_down1.Visible = false;
-            this.label_points_down1.Click += new System.EventHandler(this.label_points_down1_Click);
             // 
             // label_points_up1
             // 
@@ -558,9 +544,8 @@
             this.Controls.Add(this.label_static_set);
             this.Controls.Add(this.panel_sets2);
             this.Controls.Add(this.label_colon);
-            this.Controls.Add(this.label_points_down2);
+            this.Controls.Add(this.label_points_revert);
             this.Controls.Add(this.label_points_up2);
-            this.Controls.Add(this.label_points_down1);
             this.Controls.Add(this.label_points_up1);
             this.Controls.Add(this.label_points2);
             this.Controls.Add(this.label_points1);
@@ -622,9 +607,8 @@
         private System.Windows.Forms.Label label_player1;
         private System.Windows.Forms.Label label_player2;
         private System.Windows.Forms.Label label_colon;
-        private System.Windows.Forms.Label label_points_down2;
+        private System.Windows.Forms.Label label_points_revert;
         private System.Windows.Forms.Label label_points_up2;
-        private System.Windows.Forms.Label label_points_down1;
         private System.Windows.Forms.Label label_points_up1;
         private System.Windows.Forms.Label label_points2;
         private System.Windows.Forms.Label label_points1;

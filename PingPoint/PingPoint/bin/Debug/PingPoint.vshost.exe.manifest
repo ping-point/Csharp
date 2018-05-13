@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PingPoint.exe" size="1062368">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PingPoint.exe" size="1061344">
       <assemblyIdentity name="PingPoint" version="3.1.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>mMtc43S6cmIsaX6YV+4EEJv/pvHVfkPromnTfMONz/A=</dsig:DigestValue>
+        <dsig:DigestValue>9bU/g9Z3Rp2f4bh28RcHyVxOUgKco07tXDSZYMYPqXQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
